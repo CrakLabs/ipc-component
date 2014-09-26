@@ -1,0 +1,21 @@
+{
+  "name": "crakmedia/ipc-component",
+  "version": "1.0.0",
+  "description": "IPC (Internal Process Communication) Component",
+  "autoload": {
+    "psr-0": {
+      "Crak\\Component\\IPC": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-0": {
+      "Test\\IPC": "test"
+    }
+  },
+  "require": {
+    "php": ">=5.4.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~4.0"
+  }
+}
