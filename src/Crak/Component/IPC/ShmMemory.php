@@ -6,6 +6,8 @@
 
 namespace Crak\Component\IPC;
 
+use Crak\Component\IPC\Lock\Lock;
+
 /**
  * Class ShmMemory
  * @package Crak\Component\IPC
@@ -31,16 +33,18 @@ class ShmMemory implements Memory
     private $varNames;
 
     /**
-     * @var resource
+     * @var Lock
      */
     private $lock;
 
     /**
      * @param int $id
+     * @param Lock $lock
      */
-    public function __construct($id)
+    public function __construct($id, Lock $lock)
     {
         $this->id = $id;
+        $this->lock = $lock;
         $this->memory = shm_attach($this->id);
         $this->updateNbProcess(+1);
     }
@@ -53,7 +57,7 @@ class ShmMemory implements Memory
     public function destroy()
     {
         $nbProcess = $this->updateNbProcess(-1);
-        if ($nbProcess === 0) {
+        if ($nbProcess < 1) {
             shm_remove($this->memory);
         } else {
             shm_detach($this->memory);
@@ -72,11 +76,11 @@ class ShmMemory implements Memory
         if (false === $varId) {
             shm_put_var($this->memory, count($this->varNames) + 2, $value);
             $this->varNames[] = $varName;
-            if ($this->lock()) {
+            if ($this->lock->lock()) {
                 shm_put_var($this->memory, self::SID_VARS, $this->varNames);
-                $this->unlock();
+                $this->lock->unlock();
             }
-        } else if ($this->lock()) {
+        } else if ($this->lock->lock()) {
             if (is_null($value)) {
                 shm_remove_var($this->memory, $varId + 2);
                 unset($this->varNames[$varId]);
@@ -84,7 +88,7 @@ class ShmMemory implements Memory
             } else {
                 shm_put_var($this->memory, $varId + 2, $value);
             }
-            $this->unlock();
+            $this->lock->unlock();
         }
     }
 
@@ -96,6 +100,7 @@ class ShmMemory implements Memory
     public function get($varName)
     {
         $this->loadVars();
+
         $varId = array_search($varName, $this->varNames);
         if (false === $varId) {
             return false;
@@ -115,7 +120,7 @@ class ShmMemory implements Memory
     public function clear()
     {
         $nbVars = count($this->varNames);
-        for ($i = 2; $i < $nbVars; $i++) {
+        for ($i = 0; $i < $nbVars; $i++) {
             $this->del($this->varNames[$i]);
         }
     }
@@ -127,7 +132,25 @@ class ShmMemory implements Memory
      */
     private function updateNbProcess($add)
     {
-        if (!$this->lock()) {
+        $nbProcess = $this->getNbProcess();
+
+        $nbProcess += $add;
+        if ($nbProcess < 0) {
+            $nbProcess = 0;
+        }
+
+        shm_put_var($this->memory, self::SID_NB_PROCESS, $nbProcess);
+        $this->lock->unlock();
+
+        return $nbProcess;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNbProcess()
+    {
+        if (!$this->lock->lock()) {
             return 0;
         }
 
@@ -135,34 +158,13 @@ class ShmMemory implements Memory
         if (shm_has_var($this->memory, self::SID_NB_PROCESS)) {
             $nbProcess = shm_get_var($this->memory, self::SID_NB_PROCESS);
         }
-        $nbProcess += $add;
-        shm_put_var($this->memory, self::SID_NB_PROCESS, $nbProcess);
-        $this->unlock();
 
         return $nbProcess;
     }
 
-    /**
-     * @return bool
-     */
-    private function lock()
-    {
-        $this->lock = sem_get($this->id);
-
-        return sem_acquire($this->lock);
-    }
-
-    /**
-     * @return bool
-     */
-    private function unlock()
-    {
-        return sem_release($this->lock);
-    }
-
     private function loadVars()
     {
-        if (!$this->lock()) {
+        if (!$this->lock->lock()) {
             return;
         }
 
@@ -173,6 +175,14 @@ class ShmMemory implements Memory
             $this->varNames = shm_get_var($this->memory, self::SID_VARS);
         }
 
-        $this->unlock();
+        $this->lock->unlock();
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 }
