@@ -81,7 +81,9 @@ class ShmMemoryTest extends \PHPUnit_Framework_TestCase
     public function getMemory()
     {
         if (is_null(self::$memory)) {
-            $uid = (new FtokUIDGenerator(__DIR__ . '/tmp', self::PROJECT_ID))->generateUID();
+            $uid = (new FtokUIDGenerator(__DIR__ . '/tmp', self::PROJECT_ID))
+                ->generateUID()
+                ->getValue();
             self::$memory = new ShmMemory($uid, new SmLock($uid));
         }
 

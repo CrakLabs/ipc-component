@@ -31,24 +31,4 @@ class SmLockTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->lock->lock());
         $this->assertTrue($this->lock->unlock());
     }
-
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage sem_release() expects parameter 1 to be resource, null given
-     */
-    public function testShouldNotUnlockIfNotLocked()
-    {
-        $this->lock->unlock();
-    }
-
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage sem_release() expects parameter 1 to be resource, null given
-     */
-    public function testShouldUnlockAfterDestruct()
-    {
-        $this->assertTrue($this->lock->lock());
-        $this->lock->__destruct();
-        $this->lock->unlock();
-    }
 } 

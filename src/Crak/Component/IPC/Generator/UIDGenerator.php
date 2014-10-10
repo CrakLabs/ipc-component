@@ -5,6 +5,7 @@
  */
 
 namespace Crak\Component\IPC\Generator;
+use Crak\Component\IPC\UUID;
 
 /**
  * Interface UIDGenerator
@@ -13,7 +14,7 @@ namespace Crak\Component\IPC\Generator;
 interface UIDGenerator
 {
     /**
-     * @return int
+     * @return UUID
      */
     public function generateUID();
 }

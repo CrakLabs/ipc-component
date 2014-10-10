@@ -18,8 +18,12 @@ class FtokUIDGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $generator = new FtokUIDGenerator();
         $uid = $generator->generateUID();
-        $this->assertInternalType('int', $uid);
-        $this->assertTrue($uid >= 1000000000, $uid);
+
+        $this->assertInternalType('int', $uid->getValue());
+        $this->assertTrue($uid->getValue() >= 1000000000);
+
+        $this->assertFileExists($uid->getFilename());
+        unlink($uid->getFilename());
     }
 }
  

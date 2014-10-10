@@ -6,6 +6,9 @@
 
 namespace Crak\Component\IPC\Generator;
 
+use Crak\Component\IPC\FtokUUID;
+use Crak\Component\IPC\UUID;
+
 /**
  * Class FtokUIDGenerator
  * @package Crak\Component\IPC
@@ -54,12 +57,12 @@ class FtokUIDGenerator implements UIDGenerator
     /**
      * Generates a System V IPC key based on an unique file name.
      *
-     * @return int
+     * @return FtokUUID
      */
     public function generateUID()
     {
         $filename = tempnam($this->tmpDir, self::IPC_TMP_FILE_PREFIX);
 
-        return ftok($filename, $this->projectId);
+        return new FtokUUID(ftok($filename, $this->projectId), $filename);
     }
 } 
