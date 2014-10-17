@@ -7,7 +7,6 @@
 namespace Crak\Component\IPC\Generator;
 
 use Crak\Component\IPC\FtokUUID;
-use Crak\Component\IPC\UUID;
 
 /**
  * Class FtokUIDGenerator
@@ -42,6 +41,10 @@ class FtokUIDGenerator implements UIDGenerator
         $this->setDefaults();
 
         $this->projectId = substr($this->projectId, 0, 1);
+
+        if (!file_exists($this->tmpDir)) {
+            mkdir($this->tmpDir);
+        }
     }
 
     private function setDefaults()
