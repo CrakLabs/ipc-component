@@ -1,6 +1,6 @@
 {
   "name": "crakmedia/ipc-component",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "IPC (Internal Process Communication) Component",
   "autoload": {
     "psr-0": {
