@@ -1,7 +1,7 @@
 {
   "name": "crakmedia/ipc-component",
-  "version": "0.0.1",
   "description": "IPC (Internal Process Communication) Component",
+  "license": "MIT",
   "autoload": {
     "psr-0": {
       "Crak\\Component\\IPC": "src"
