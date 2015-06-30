@@ -10,7 +10,7 @@ namespace Crak\Component\IPC;
  * Interface Memory
  * @package Crak\Component\IPC
  */
-interface Memory
+interface MemoryInterface
 {
     /**
      * @param string $varName

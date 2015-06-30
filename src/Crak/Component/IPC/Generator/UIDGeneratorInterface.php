@@ -11,7 +11,7 @@ use Crak\Component\IPC\UUID;
  * Interface UIDGenerator
  * @package Crak\Component\IPC
  */
-interface UIDGenerator
+interface UIDGeneratorInterface
 {
     /**
      * @return UUID

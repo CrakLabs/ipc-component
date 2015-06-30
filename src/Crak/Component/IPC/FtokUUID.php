@@ -9,7 +9,7 @@
 namespace Crak\Component\IPC;
 
 
-class FtokUUID implements UUID
+class FtokUUID implements UUIDInterface
 {
     /**
      * @var int

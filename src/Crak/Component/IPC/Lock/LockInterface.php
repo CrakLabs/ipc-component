@@ -10,7 +10,7 @@ namespace Crak\Component\IPC\Lock;
  * Interface Lock
  * @package Crak\Component\IPC
  */
-interface Lock
+interface LockInterface
 {
     /**
      * @return bool

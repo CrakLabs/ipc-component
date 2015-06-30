@@ -12,7 +12,7 @@ namespace Crak\Component\IPC;
  * Interface UUID
  * @package Crak\Component\IPC
  */
-interface UUID
+interface UUIDInterface
 {
     /**
      * @return int

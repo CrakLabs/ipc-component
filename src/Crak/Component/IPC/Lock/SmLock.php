@@ -10,7 +10,7 @@ namespace Crak\Component\IPC\Lock;
  * Class SmLock
  * @package Crak\Component\IPC\Lock
  */
-class SmLock implements Lock
+class SmLock implements LockInterface
 {
     /**
      * @var int

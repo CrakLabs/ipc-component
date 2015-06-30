@@ -12,7 +12,7 @@ use Crak\Component\IPC\FtokUUID;
  * Class FtokUIDGenerator
  * @package Crak\Component\IPC
  */
-class FtokUIDGenerator implements UIDGenerator
+class FtokUIDGenerator implements UIDGeneratorInterface
 {
     const IPC_TMP_FILE_PREFIX = 'IPC';
 

@@ -6,13 +6,13 @@
 
 namespace Crak\Component\IPC;
 
-use Crak\Component\IPC\Lock\Lock;
+use Crak\Component\IPC\Lock\Lockinterface;
 
 /**
  * Class ShmMemory
  * @package Crak\Component\IPC
  */
-class ShmMemory implements Memory
+class ShmMemory implements MemoryInterface
 {
     const SID_VARS = 0;
     const SID_NB_PROCESS = 1;
@@ -41,7 +41,7 @@ class ShmMemory implements Memory
      * @param int $id
      * @param Lock $lock
      */
-    public function __construct($id, Lock $lock)
+    public function __construct($id, LockInterface $lock)
     {
         $this->id = $id;
         $this->lock = $lock;
